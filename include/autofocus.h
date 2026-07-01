@@ -48,9 +48,10 @@ FOCUS_API void ResetFocusState(FocusState* state);
  * @param out_next_z [输出] 决策后的下一个 Z 轴目标位置
  * @param step_size 步长
  * @param direction 当前运动方向 (1 向上，-1 向下)
+ * @param drop_threshold 0.0-1.0之间，表示得分下降的相对阈值，默认值为0.1，低于此阈值的下降不会触发对焦完成判定。
  * @return int 状态代码：0-继续寻找，1-成功找到波峰并已计算出最佳位置，-1-异常
  */
-FOCUS_API int UpdateFocusDecision(FocusState* state, double current_score, double current_z, double* out_next_z, double step_size, int direction);
+FOCUS_API int UpdateFocusDecision(FocusState* state, double current_score, double current_z, double* out_next_z, double step_size, int direction,float drop_threshold=0.1);
 
 #ifdef __cplusplus
 }

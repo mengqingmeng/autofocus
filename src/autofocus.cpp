@@ -42,7 +42,7 @@ FOCUS_API void ResetFocusState(FocusState* state) {
     }
 }
 
-FOCUS_API int UpdateFocusDecision(FocusState* state, double current_score, double current_z, double* out_next_z, double step_size, int direction) 
+FOCUS_API int UpdateFocusDecision(FocusState* state, double current_score, double current_z, double* out_next_z, double step_size, int direction,float drop_threshold) 
 {
     if (!state || !out_next_z) return -1;
 
@@ -65,7 +65,7 @@ FOCUS_API int UpdateFocusDecision(FocusState* state, double current_score, doubl
     // 3. 【核心改动】双重判定：不仅要连续下降3次，而且当前得分必须明显低于最高点
     // 设定一个相对门限（例如：比最高点低了 8%）
     double drop_ratio = (state->max_score - current_score) / state->max_score;
-    double threshold = 0.28; // 8% 的容忍度，根据工业相机噪点大小调整
+    double threshold = drop_threshold; // 使用传入的阈值
 
     if (state->decrease_count >= 3 && drop_ratio > threshold) {
         state->is_focused = 1;
