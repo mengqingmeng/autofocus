@@ -45,4 +45,4 @@ double score = GetClarityScore(frame.data, frame.cols, frame.rows, 0, 0, 0, 0);
 //  -1 异常
 int res = UpdateFocusDecision(&focus_manager, score, current_z, &next_z, step_size, search_direction);
 ```
-- 
+- 在我的电脑上测试，每帧图像计算耗时50ms左右。
