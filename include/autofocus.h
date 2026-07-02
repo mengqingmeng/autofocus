@@ -49,9 +49,10 @@ FOCUS_API void ResetFocusState(FocusState* state);
  * @param step_size 步长
  * @param direction 当前运动方向 (1 向上，-1 向下)
  * @param drop_threshold 0.0-1.0之间，表示得分下降的相对阈值，默认值为0.1，低于此阈值的下降不会触发对焦完成判定。
+ * @param max_decrease_count 最大连续下降次数，超过此次数则判定为对焦完成, 默认值为5，最小值为1。
  * @return int 状态代码：0-继续寻找，1-成功找到波峰并已计算出最佳位置，-1-异常
  */
-FOCUS_API int UpdateFocusDecision(FocusState* state, double current_score, double current_z, double* out_next_z, double step_size, int direction,float drop_threshold=0.1);
+FOCUS_API int UpdateFocusDecision(FocusState* state, double current_score, double current_z, double* out_next_z, double step_size, int direction,float drop_threshold=0.1,int max_decrease_count=5);
 
 #ifdef __cplusplus
 }

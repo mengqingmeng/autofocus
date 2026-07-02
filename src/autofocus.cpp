@@ -42,7 +42,7 @@ FOCUS_API void ResetFocusState(FocusState* state) {
     }
 }
 
-FOCUS_API int UpdateFocusDecision(FocusState* state, double current_score, double current_z, double* out_next_z, double step_size, int direction,float drop_threshold) 
+FOCUS_API int UpdateFocusDecision(FocusState* state, double current_score, double current_z, double* out_next_z, double step_size, int direction,float drop_threshold,int max_decrease_count) 
 {
     if (!state || !out_next_z) return -1;
 
@@ -50,6 +50,8 @@ FOCUS_API int UpdateFocusDecision(FocusState* state, double current_score, doubl
         *out_next_z = state->best_z_position;
         return 1;
     }
+
+    max_decrease_count = std::max(1, max_decrease_count); // 确保至少为 1
 
     // 1. 发现更高的清晰度，更新最高点
     if (current_score > state->max_score) {
@@ -67,7 +69,7 @@ FOCUS_API int UpdateFocusDecision(FocusState* state, double current_score, doubl
     double drop_ratio = (state->max_score - current_score) / state->max_score;
     double threshold = drop_threshold; // 使用传入的阈值
 
-    if (state->decrease_count >= 3 && drop_ratio > threshold) {
+    if (state->decrease_count >= max_decrease_count && drop_ratio > threshold) {
         state->is_focused = 1;
         *out_next_z = state->best_z_position; // 确认为波峰，回溯
         return 1; 
