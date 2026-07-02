@@ -19,6 +19,7 @@ cmake --build . --config Release
 ```
 - OpenCV_DIR 换成你的opencv路径
 #### 2. 添加库
+将静态库拷贝至项目中
 ##### CMake
 ```CMake
 add_executable(focus_test focus_test.cpp)
