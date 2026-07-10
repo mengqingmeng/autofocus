@@ -8,10 +8,6 @@
     #define FOCUS_API __attribute__((visibility("default")))
 #endif
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /**
  * @brief 计算图像指定区域(ROI)的清晰度得分（拉普拉斯方差法）
  * * @param buffer 图像原始数据指针 (BGR 格式)
@@ -42,7 +38,7 @@ FOCUS_API void ResetFocusState(FocusState* state);
 
 /**
  * @brief 爬山法对焦步进决策
- * * @param state 当前状态机指针
+ * @param state 当前状态机指针
  * @param current_score 当前帧的清晰度得分
  * @param current_z 当前 Z 轴实际位置
  * @param out_next_z [输出] 决策后的下一个 Z 轴目标位置
@@ -54,8 +50,17 @@ FOCUS_API void ResetFocusState(FocusState* state);
  */
 FOCUS_API int UpdateFocusDecision(FocusState* state, double current_score, double current_z, double* out_next_z, double step_size, int direction,float drop_threshold=0.1,int max_decrease_count=5);
 
-#ifdef __cplusplus
-}
-#endif
+
+/**
+ * @brief 爬山法对焦步进决策（不要输出）
+ * @param state 当前状态机指针
+ * @param current_score 当前帧的清晰度得分
+ * @param current_z 当前 Z 轴实际位置
+ * @param direction 当前运动方向 (1 向上，-1 向下)
+ * @param drop_threshold 0.0-1.0之间，表示得分下降的相对阈值，默认值为0.1，低于此阈值的下降不会触发对焦完成判定。
+ * @param max_decrease_count 最大连续下降次数，超过此次数则判定为对焦完成, 默认值为5，最小值为1。
+ * @return int 状态代码：0-继续寻找，1-成功找到波峰并已计算出最佳位置，-1-异常
+ */
+FOCUS_API int UpdateFocusDecision(FocusState* state, double current_score,double current_z,int direction,float drop_threshold=0.1,int max_decrease_count=5);
 
 #endif // AUTOFOCUS_H

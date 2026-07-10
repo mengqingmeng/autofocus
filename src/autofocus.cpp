@@ -44,10 +44,11 @@ FOCUS_API void ResetFocusState(FocusState* state) {
 
 FOCUS_API int UpdateFocusDecision(FocusState* state, double current_score, double current_z, double* out_next_z, double step_size, int direction,float drop_threshold,int max_decrease_count) 
 {
-    if (!state || !out_next_z) return -1;
+    if (!state) return -1;
 
     if (state->is_focused) {
-        *out_next_z = state->best_z_position;
+        if(out_next_z)
+            *out_next_z = state->best_z_position;
         return 1;
     }
 
@@ -71,11 +72,17 @@ FOCUS_API int UpdateFocusDecision(FocusState* state, double current_score, doubl
 
     if (state->decrease_count >= max_decrease_count && drop_ratio > threshold) {
         state->is_focused = 1;
-        *out_next_z = state->best_z_position; // 确认为波峰，回溯
+        if(out_next_z)
+            *out_next_z = state->best_z_position; // 确认为波峰，回溯
         return 1; 
     }
 
-    // 4. 未满足判据，继续前进
-    *out_next_z = current_z + (direction * step_size);
+    if(out_next_z)// 4. 未满足判据，继续前进
+        *out_next_z = current_z + (direction * step_size);
     return 0;
+}
+
+FOCUS_API int UpdateFocusDecision(FocusState *state, double current_score, double current_z,int direction, float drop_threshold, int max_decrease_count)
+{
+    return UpdateFocusDecision(state,current_score,current_z,nullptr,0,direction,drop_threshold,max_decrease_count);
 }

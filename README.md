@@ -2,7 +2,7 @@
 使用opencv实现工业相机的自动聚焦功能
 
 ### 依赖
-- opencv:5.0.0
+- opencv:4.9.0
 
 ### 目录说明
 - include 头文件目录
@@ -14,7 +14,7 @@
 #### 1. 编译项目
 ```bash
 cd build 
-cmake -DOpenCV_DIR="E:/SDK/opencv/5.0.0/build" ..
+cmake -DOpenCV_DIR="E:/SDK/opencv/4.9.0/build/x64/vc16/lib" ..
 cmake --build . --config Release
 ```
 - OpenCV_DIR 换成你的opencv路径
