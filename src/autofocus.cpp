@@ -68,9 +68,8 @@ FOCUS_API int UpdateFocusDecision(FocusState* state, double current_score, doubl
     // 3. 【核心改动】双重判定：不仅要连续下降3次，而且当前得分必须明显低于最高点
     // 设定一个相对门限（例如：比最高点低了 8%）
     double drop_ratio = (state->max_score - current_score) / state->max_score;
-    double threshold = drop_threshold; // 使用传入的阈值
 
-    if (state->decrease_count >= max_decrease_count && drop_ratio > threshold) {
+    if (state->decrease_count >= max_decrease_count && drop_ratio > drop_threshold) {
         state->is_focused = 1;
         if(out_next_z)
             *out_next_z = state->best_z_position; // 确认为波峰，回溯
